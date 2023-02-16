@@ -1,4 +1,4 @@
-const db = require("./connection");
+const db = require("./index");
 const format = require('pg-format');
 
 const seed = ({ shopData, treasureData }) => {
@@ -17,7 +17,11 @@ const seed = ({ shopData, treasureData }) => {
 	// then: insert the raw data into the tables.
 	.then(() => {
 		return insertShops(shopData);
-	});
+	})
+	.then((insertedShops) => {
+		const lookUpShops = prepareTreasuresData(insertedShops, treasureData);
+		return insertTreasures(lookUpShops);
+	})
 };
 
 function createShops() {
@@ -53,11 +57,25 @@ function insertShops(shopData) {
 	);
 	
 	return db.query(insertShopsStr)
-	.then(insertParksResult => insertParksResult.rows);
+	.then(result => result.rows);
 }
 
 function arrangeShopsData(shopData) {
 	return shopData.map(shop => [shop.shop_name, shop.owner, shop.slogan]);
 }
 
-module.exports = seed;
+function prepareTreasuresData(insertedShops, treasureData) {
+
+
+}
+
+function insertTreasures() {
+	
+	
+}
+
+module.exports = {
+	seed,
+	arrangeShopsData,
+	prepareTreasuresData,
+};
