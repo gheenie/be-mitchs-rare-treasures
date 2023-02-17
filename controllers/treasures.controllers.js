@@ -4,6 +4,7 @@ const {
 
 function getTreasures(request, response, next) {
     const { sort_by } = request.query;
+    
     fetchTreasures(sort_by)
     .then(treasures => {
         response.status(200).send({ treasures });

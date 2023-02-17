@@ -43,59 +43,69 @@ describe("GET: /api/treasures", () => {
         });
     });
 
-    it("200; treasures sorted by age in ascending order", () => {
+    it("200; returns treasures sorted by age and ASC by default", () => {
         return request(app)
         .get("/api/treasures")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureOne.age - treasureTwo.age;
             })
-            expect(treasuresCopy).toEqual(treasures);
-    });
-});
 
-    it("200; accepts sort_by query of age", () => {
+            expect(treasuresCopy).toEqual(treasures);
+        });
+    });
+
+    it("200; accepts sort_by query of age; sorted ASC by default", () => {
         return request(app)
         .get("/api/treasures?sort_by=age")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureOne.age - treasureTwo.age;
             })
+
             expect(treasuresCopy).toEqual(treasures);
+        });
     });
-});
-    it("200; accepts sort_by query of cost_at_auction", () => {
+
+    it("200; accepts sort_by query of cost_at_auction; sorted ASC by default", () => {
         return request(app)
         .get("/api/treasures?sort_by=cost_at_auction")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureOne.cost_at_auction - treasureTwo.cost_at_auction;
             })
+
             expect(treasuresCopy).toEqual(treasures);
+        });
     });
-    });
-    it("200; accepts sort_by query of treasure_name", () => {
+
+    it("200; accepts sort_by query of treasure_name; sorted ASC by default", () => {
         return request(app)
         .get("/api/treasures")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
-             if (treasureOne.treasure_name < treasureTwo.treasure_name) return -1;
-            if (treasureOne.treasure_name > treasureTwo.treasure_name) return 1;
-            return 0;
-        })
+                if (treasureOne.treasure_name < treasureTwo.treasure_name) return -1;
+                if (treasureOne.treasure_name > treasureTwo.treasure_name) return 1;
+                return 0;
+            });
+    
             expect(treasuresCopy).toEqual(treasures);
-    });
+        });
     });
 });
