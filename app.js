@@ -2,7 +2,10 @@ const express = require("express");
 const {
   getTreasures,
 } = require("./controllers/treasures.controllers");
-const { handle404StatusCodes, handle500StatusCodes } = require("./controllers/errors.controllers");
+const { 
+    handleCustomErrors, 
+    handleServerErrors 
+} = require("./controllers/errors.controllers");
 
 const app = express();
 
@@ -10,8 +13,8 @@ app.use(express.json());
 
 app.get('/api/treasures', getTreasures);
 
-app.use(handle404StatusCodes);
+app.use(handleCustomErrors);
 
-app.use(handle500StatusCodes);
+app.use(handleServerErrors);
 
 module.exports = app;
