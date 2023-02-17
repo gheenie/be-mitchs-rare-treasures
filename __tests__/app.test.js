@@ -104,34 +104,39 @@ describe("GET: /api/treasures", () => {
                 if (treasureOne.treasure_name > treasureTwo.treasure_name) return 1;
                 return 0;
             });
+
             expect(treasuresCopy).toEqual(treasures);
         });
     });
 
-    it("200; accepts order query of desc sorted age by default", () => {
+    it("200; accepts order query of desc; sorted by age by default", () => {
         return request(app)
         .get("/api/treasures?order=desc")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureTwo.age - treasureOne.age;
             });
+
             expect(treasuresCopy).toEqual(treasures);
         });
     });
 
-    it("200; accepts order query of desc and sort_by query", () => {
+    it("200; accepts order query; and sort_by query", () => {
         return request(app)
         .get("/api/treasures?order=desc&sort_by=cost_at_auction")
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureTwo.cost_at_auction - treasureOne.cost_at_auction;
             });
+
             expect(treasuresCopy).toEqual(treasures);
         });
     });
@@ -143,12 +148,15 @@ describe("GET: /api/treasures", () => {
         .then((response) => {
             const treasures = response.body.treasures;
             const treasuresCopy = [...treasures];
+
             treasuresCopy.sort((treasureOne, treasureTwo) => {
                 return treasureOne.age - treasureTwo.age;
             });
+
             expect(treasuresCopy).toEqual(treasures);
+
             treasures.forEach((treasure) => {
-                expect(treasure.colour).toBe("gold")
+                expect(treasure.colour).toBe("gold");
             })
         });
     });
@@ -164,7 +172,7 @@ describe("GET: /api/treasures", () => {
 
     it("404; the order query is not a valid ORDER BY value", () => {
         return request(app)
-        .get("/api/treasures?order=DESC")
+        .get("/api/treasures?order=DeSc")
         .expect(404)
         .then((response) => {
             expect(response.body.msg).toBe('Invalid order query');
