@@ -1,9 +1,9 @@
 const db = require("../db/index");
-const format = require("pg-format");
 
-function fetchTreasures() {
-    const queryString = `SELECT * FROM treasures;`
-    
+
+function fetchTreasures(sort_by) {
+    const validColumns = ['age']
+    const queryString = `SELECT * FROM treasures JOIN shops USING (shop_id) ORDER BY age ASC;`
     return db.query(queryString)
     .then(result => {
         return result.rows;

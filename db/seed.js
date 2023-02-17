@@ -99,6 +99,8 @@ function insertTreasures(treasuresWithShopId) {
 	.then(result => result.rows);
 }
 
+
+
 module.exports = {
 	seed,
 	arrangeShopsData,

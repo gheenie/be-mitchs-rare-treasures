@@ -3,7 +3,8 @@ const {
   } = require("../models/treasures.models");
 
 function getTreasures(request, response, next) {
-    fetchTreasures()
+    const { sort_by } = request.query;
+    fetchTreasures(sort_by)
     .then(treasures => {
         response.status(200).send({ treasures });
     })
@@ -11,6 +12,8 @@ function getTreasures(request, response, next) {
         next(err);
     });
 }
+
+
 
 module.exports = {
     getTreasures,
