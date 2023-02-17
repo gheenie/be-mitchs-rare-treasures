@@ -49,13 +49,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
 
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureOne.age - treasureTwo.age;
-            })
-
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('age');
         });
     });
 
@@ -65,13 +60,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
 
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureOne.age - treasureTwo.age;
-            })
-
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('age');
         });
     });
 
@@ -81,13 +71,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
 
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureOne.cost_at_auction - treasureTwo.cost_at_auction;
-            })
-
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('cost_at_auction');
         });
     });
 
@@ -97,15 +82,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
-            
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                if (treasureOne.treasure_name < treasureTwo.treasure_name) return -1;
-                if (treasureOne.treasure_name > treasureTwo.treasure_name) return 1;
-                return 0;
-            });
 
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('treasure_name');
         });
     });
 
@@ -115,13 +93,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
 
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureTwo.age - treasureOne.age;
-            });
-
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('age', { descending: true });
         });
     });
 
@@ -131,13 +104,8 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
 
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureTwo.cost_at_auction - treasureOne.cost_at_auction;
-            });
-
-            expect(treasuresCopy).toEqual(treasures);
+            expect(treasures).toBeSortedBy('cost_at_auction', { descending: true });
         });
     });
 
@@ -147,17 +115,12 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
-
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureOne.age - treasureTwo.age;
-            });
-
-            expect(treasuresCopy).toEqual(treasures);
 
             treasures.forEach((treasure) => {
                 expect(treasure.colour).toBe("gold");
             })
+
+            expect(treasures).toBeSortedBy('age');
         });
     });
 
@@ -187,18 +150,13 @@ describe("GET: /api/treasures", () => {
         .expect(200)
         .then((response) => {
             const treasures = response.body.treasures;
-            const treasuresCopy = [...treasures];
-
-            treasuresCopy.sort((treasureOne, treasureTwo) => {
-                return treasureOne.age - treasureTwo.age;
-            });
-
-            expect(treasuresCopy).toEqual(treasures);
 
             treasures.forEach((treasure) => {
                 expect(treasure.age).toBe(13);
                 expect(treasure.colour).toBe('gold');
             })
+
+            expect(treasures).toBeSortedBy('age');
         });
     });
 
