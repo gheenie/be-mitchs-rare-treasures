@@ -1,18 +1,27 @@
-const { query } = require("../db/index");
 const db = require("../db/index");
 
-
-function fetchTreasures(sort_by = "age", order = "asc", colour) {
+function fetchTreasures(sort_by = "age", order = "asc", colour, age) {
     let queryString = `SELECT * 
     FROM treasures 
     JOIN shops 
-    USING (shop_id) `
+    USING (shop_id) `;
 
     const queryValues = [];
 
     if (colour !== undefined) {
-       queryValues.push(colour);
-       queryString += `WHERE colour = $1 `;
+        queryValues.push(colour);
+        queryString += `WHERE colour = $1 `;
+    }
+
+    if (age !== undefined) {
+        if (queryValues.length) {
+            queryString += ' AND';
+        } else {
+            queryString += ' WHERE';
+        }
+
+        queryValues.push(age);
+        queryString += ` age = $${queryValues.length} `;
     }
 
     const validSortColumns = ['age', 'cost_at_auction', 'treasure_name'];

@@ -161,6 +161,47 @@ describe("GET: /api/treasures", () => {
         });
     });
 
+    it("200; accepts age query and returns filtered treasures", () => {
+        return request(app)
+        .get("/api/treasures?age=13")
+        .expect(200)
+        .then((response) => {
+            const treasures = response.body.treasures;
+            const treasuresCopy = [...treasures];
+
+            treasuresCopy.sort((treasureOne, treasureTwo) => {
+                return treasureOne.age - treasureTwo.age;
+            });
+
+            expect(treasuresCopy).toEqual(treasures);
+
+            treasures.forEach((treasure) => {
+                expect(treasure.age).toBe(13);
+            })
+        });
+    });
+
+    it("200; accepts age and colour queries and WHERE filtering works for both", () => {
+        return request(app)
+        .get("/api/treasures?age=13&colour=gold")
+        .expect(200)
+        .then((response) => {
+            const treasures = response.body.treasures;
+            const treasuresCopy = [...treasures];
+
+            treasuresCopy.sort((treasureOne, treasureTwo) => {
+                return treasureOne.age - treasureTwo.age;
+            });
+
+            expect(treasuresCopy).toEqual(treasures);
+
+            treasures.forEach((treasure) => {
+                expect(treasure.age).toBe(13);
+                expect(treasure.colour).toBe('gold');
+            })
+        });
+    });
+
     it("404; the sort_by query is not a valid ORDER BY column", () => {
         return request(app)
         .get("/api/treasures?sort_by=1234")
@@ -185,6 +226,15 @@ describe("GET: /api/treasures", () => {
         .expect(404)
         .then((response) => {
             expect(response.body.msg).toBe('Not Found');
+        });
+    });
+
+    it("400; the age value is invalid for WHERE filtering", () => {
+        return request(app)
+        .get("/api/treasures?age=notAnInt")
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('Bad Request');
         });
     });
 });
