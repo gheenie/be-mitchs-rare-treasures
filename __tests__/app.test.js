@@ -21,7 +21,7 @@ describe("GET: /api/treasures", () => {
         });
     });
 
-    it("200; returns the treasures correctly joined", () => {
+    it("200; returns the treasures correctly joined with shops", () => {
         return request(app)
         .get("/api/treasures")
         .expect(200)
@@ -43,7 +43,7 @@ describe("GET: /api/treasures", () => {
         });
     });
 
-    it("200; returns treasures sorted by age and ASC by default", () => {
+    it("200; returns treasures sorted by age, and ASC by default", () => {
         return request(app)
         .get("/api/treasures")
         .expect(200)
@@ -107,6 +107,7 @@ describe("GET: /api/treasures", () => {
             expect(treasuresCopy).toEqual(treasures);
         });
     });
+
     it("200; accepts order query of desc sorted age by default", () => {
         return request(app)
         .get("/api/treasures?order=desc")
@@ -120,6 +121,7 @@ describe("GET: /api/treasures", () => {
             expect(treasuresCopy).toEqual(treasures);
         });
     });
+
     it("200; accepts order query of desc and sort_by query", () => {
         return request(app)
         .get("/api/treasures?order=desc&sort_by=cost_at_auction")
@@ -133,6 +135,7 @@ describe("GET: /api/treasures", () => {
             expect(treasuresCopy).toEqual(treasures);
         });
     });
+
     it("200; accepts colour query and returns filtered treasures", () => {
         return request(app)
         .get("/api/treasures?colour=gold")
@@ -147,6 +150,33 @@ describe("GET: /api/treasures", () => {
             treasures.forEach((treasure) => {
                 expect(treasure.colour).toBe("gold")
             })
+        });
+    });
+
+    it("404; the sort_by query is not a valid ORDER BY column", () => {
+        return request(app)
+        .get("/api/treasures?sort_by=1234")
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('Invalid sort query');
+        });
+    });
+
+    it("404; the order query is not a valid ORDER BY value", () => {
+        return request(app)
+        .get("/api/treasures?order=DESC")
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('Invalid order query');
+        });
+    });
+
+    it("404; the colour value does not return any treasures after WHERE filtering", () => {
+        return request(app)
+        .get("/api/treasures?colour=1234")
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('Not Found');
         });
     });
 });
