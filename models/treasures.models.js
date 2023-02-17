@@ -1,22 +1,39 @@
+const { query } = require("../db/index");
 const db = require("../db/index");
 
 
-function fetchTreasures(sort_by) {
-    const queryString = `SELECT * 
+function fetchTreasures(sort_by = "age", order = "asc", colour) {
+    let queryString = `SELECT * 
     FROM treasures 
     JOIN shops 
-    USING (shop_id) 
-    ORDER BY age ASC;`
+    USING (shop_id) `
 
-    //sort_by !== undefined OR change sort_by param to default to age
     
-    const validColumns = ['age'];
+    const queryValues = [];
+    if (colour !== undefined) {
+       queryValues.push(colour);
+       queryString += `WHERE colour = $1 `
+    }
+    const validSortColumns = ['age', 'cost_at_auction', 'treasure_name'];
+    const validOrders = ['asc', 'desc'];
 
-    // if validCols doesnt include sort_by return custom promise.reject
+
+    if (!validSortColumns.includes(sort_by)) {
+        return Promise.reject({
+            status: 404,
+            msg: `Invalid sort query`,
+          });
+    }
+    if (!validOrders.includes(order)) {
+        return Promise.reject({
+            status: 404,
+            msg: `Invalid order query`,
+          });
+    }
     
-    // add last order by statement
+    queryString += `ORDER BY ${sort_by} ${order};`
 
-    return db.query(queryString)
+    return db.query(queryString, queryValues)
     .then(result => {
         return result.rows;
     });
